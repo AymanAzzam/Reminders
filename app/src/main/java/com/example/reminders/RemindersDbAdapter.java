@@ -52,13 +52,19 @@ public class RemindersDbAdapter {
     }
 
 
-    //TODO implement the function createReminder() which take the name as the content of the reminder and boolean important...note that the id will be created for you automatically
+    //take the name as the content of the reminder and boolean important. the id will be created for you automatically
     public void createReminder(String name, boolean important) {
-      
+	ContentValues contentValue = new ContentValues();
+        contentValue.put(mDbHelper.COL_CONTENT, name);
+        contentValue.put(mDbHelper.COL_IMPORTANT, important);
+        database.insert(mDbHelper.TABLE_NAME, null, contentValue);
     }
-    //TODO overloaded to take a reminder
+    //overloaded to take a reminder
     public long createReminder(Reminder reminder) {
-        return 5;
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(mDbHelper.COL_CONTENT, reminder.getContent());
+        contentValue.put(mDbHelper.COL_IMPORTANT, reminder.getImportant());
+        database.insert(mDbHelper.TABLE_NAME, null, contentValue);
     }
 
     //TODO implement the function fetchReminderById() to get a certain reminder given its id
