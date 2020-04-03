@@ -18,11 +18,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DialogBox">
+        <activity android:name=".DialogBox"/>
 
-
-
-        </activity>
 
     </application>
 

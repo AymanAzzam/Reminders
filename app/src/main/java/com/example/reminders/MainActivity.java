@@ -51,123 +51,89 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showEditReminderBox(data.get(position), position);
+                showAlertDialog(data.get(position), position);
+                //showReminderBox(false,data.get(position), position);
             }
         });
-
-
     }
 
-    public void showEditReminderBox(String oldItem, final int index)
+    public void showAlertDialog(final String item,final int index)
     {
         final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setTitle("Edit Reminder");
-        dialog.setContentView(R.layout.activity_dialog_box);
+        dialog.setContentView(R.layout.activity_alert_dialog);
 
-        final EditText editText = (EditText)dialog.findViewById(R.id.edit_text);
-        editText.setText(oldItem);
+        final TextView textEdit = (TextView)dialog.findViewById(R.id.edit_reminder);
+        final TextView textDelete = (TextView)dialog.findViewById(R.id.delete_reminder);
 
-        Button bt_edit = (Button) dialog.findViewById(R.id.edit_button);
-        bt_edit.setOnClickListener(new View.OnClickListener() {
+        textEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                data.set(index, editText.getText().toString());
+                dialog.dismiss();
+                showReminderBox(false,item,index);
+            }
+        });
+
+        textDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.remove(index);
+                photos.remove(index);
                 customListView.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
 
-        final Button bt_cancel = (Button) dialog.findViewById(R.id.cancel_button);
-        bt_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
         dialog.show();
-
-        final CheckBox cb = (CheckBox) dialog.findViewById(R.id.important_checkbox);
-        final ImageView img = (ImageView) findViewById(R.id.row_imageview);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //img.setImageResource(R.drawable.red);
-                    photos.set(index, R.drawable.red);
-                    customListView.notifyDataSetChanged();
-                    buttonView.setChecked(true);
-                }
-
-                else {
-                    //img.setImageResource(R.drawable.green);
-                    photos.set(index , R.drawable.green);
-                    customListView.notifyDataSetChanged();
-                    buttonView.setChecked(false);
-                }
-            }
-        });
-
-
     }
 
-    public void showAddReminderBox () {
-
+    public void showReminderBox(final boolean add ,final String oldItem,final int index_temp)
+    {
         final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setTitle("Add Reminder");
         dialog.setContentView(R.layout.activity_dialog_box);
 
         final EditText editText = (EditText)dialog.findViewById(R.id.edit_text);
+        final Button bt_cancel = (Button) dialog.findViewById(R.id.cancel_button);
+        Button bt_task = (Button) dialog.findViewById(R.id.edit_button);
+        final CheckBox cb = (CheckBox) dialog.findViewById(R.id.important_checkbox);
+        final ImageView img = (ImageView) findViewById(R.id.row_imageview);
+        final int index;
 
 
-        Button bt_add = (Button) dialog.findViewById(R.id.edit_button);
-        bt_add.setText("Add");
-        final int[] index = new int[1];
-        index[0] = data.size();
+        if(!add)    {   index = index_temp;     editText.setText(oldItem);  }
+        else        {   index = data.size();    bt_task.setText("Add");  }
 
-        bt_add.setOnClickListener(new View.OnClickListener() {
+
+        bt_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                data.add(editText.getText().toString());
-                //photos.add(R.drawable.green);
+                if(add) {
+                    data.add(editText.getText().toString());
+                    photos.add(R.drawable.green);
+                    if(cb.isChecked())
+                        photos.set(index, R.drawable.red);
+                }
+                else {
+                    data.set(index, editText.getText().toString());
+                    photos.set(index, R.drawable.green);
+                    if(cb.isChecked())
+                        photos.set(index, R.drawable.red);
+                }
                 customListView.notifyDataSetChanged();
-                //index[0] = data.size();
                 dialog.dismiss();
             }
         });
 
-        final Button bt_cancel = (Button) dialog.findViewById(R.id.cancel_button);
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(add) {
+                    data.add(editText.getText().toString());
+                }
                 dialog.dismiss();
             }
         });
+
         dialog.show();
-
-        final CheckBox cb = (CheckBox) dialog.findViewById(R.id.important_checkbox);
-        final ImageView img = (ImageView) findViewById(R.id.row_imageview);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //img.setImageResource(R.drawable.red);
-                    photos.add(R.drawable.green);
-                    photos.set(index[0], R.drawable.red);
-                    customListView.notifyDataSetChanged();
-                    buttonView.setChecked(true);
-                }
-
-                else {
-                    //img.setImageResource(R.drawable.green);
-                    photos.add(R.drawable.green);
-                    photos.set(index[0], R.drawable.green);
-                    customListView.notifyDataSetChanged();
-                    buttonView.setChecked(false);
-                }
-            }
-        });
     }
 
     @Override
@@ -182,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch(id){
             case R.id.add_reminder:
-                showAddReminderBox();
+                showReminderBox(true,null,0);
                 break;
             case R.id.exit:
                 finish();
