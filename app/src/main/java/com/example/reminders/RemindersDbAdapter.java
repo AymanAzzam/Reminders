@@ -1,4 +1,4 @@
-8package com.example.reminders;
+package com.example.reminders;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -49,15 +49,17 @@ public class RemindersDbAdapter {
 
 
     //take the name as the content of the reminder and boolean important. the id will be created for you automatically
-    public void createReminder(String name, boolean important) {
-	ContentValues contentValue = new ContentValues();
+    public void createReminder(String name, boolean important)
+    {
+	    ContentValues contentValue = new ContentValues();
         contentValue.put(COL_CONTENT, name);
         contentValue.put(COL_IMPORTANT, important);
         mDb.insert(TABLE_NAME, null, contentValue);
     }
 
     //overloaded to take a reminder
-    public long createReminder(Reminder reminder) {
+    public void createReminder(Reminder reminder)
+    {
         ContentValues contentValue = new ContentValues();
         contentValue.put(COL_CONTENT, reminder.getContent());
         contentValue.put(COL_IMPORTANT, reminder.getImportant());
@@ -65,40 +67,41 @@ public class RemindersDbAdapter {
     }
 
     //get a certain reminder given its id
-    public Reminder fetchReminderById(int id) {
-	String mContent;	int mImportant;		Cursor c;
-    	try
-    	{
-        	c = mDb.rawQuery("SELECT * from " + TABLE_NAME + " where " + COL_ID + " = " + id, null);
-		c.moveToFirst();
-		mContent = c.getString(c.getColumnIndex(COL_CONTENT));
-		mImportant = c.getInt(c.getColumnIndex(COL_IMPORTANT));
-		c.close();
-	}
-    	catch(Exception e)
-        	e.printStackTrace();
-
-	return new Reminder(id,mContent,mImportant);
+    public Reminder fetchReminderById(int id)
+    {
+        String mContent="";	int mImportant=0;		Cursor c;
+        try
+        {
+            c = mDb.rawQuery("SELECT * from " + TABLE_NAME + " where " + COL_ID + " = " + id, null);
+            c.moveToFirst();
+            mContent = c.getString(c.getColumnIndex(COL_CONTENT));
+            mImportant = c.getInt(c.getColumnIndex(COL_IMPORTANT));
+            c.close();
+        }
+        catch(Exception e)  {   e.printStackTrace();    }
+        return new Reminder(id,mContent,mImportant);
     }
 
     //Get all reminders
-    public Cursor fetchAllReminders() {
-	Cursor c;
-	c = mDb.rawQuery("SELECT * from " + TABLE_NAME, null);
-	c.moveToFirst();
-	return c;
+    public Cursor fetchAllReminders()
+    {
+        Cursor c;
+        c = mDb.rawQuery("SELECT * from " + TABLE_NAME, null);
+        c.moveToFirst();
+        return c;
     }
 
     //Update a certain reminder
-    public void updateReminder(Reminder reminder) {
-	ContentValues cv = new ContentValues();
-	cv.put(COL_ID,reminder.getId());
-	cv.put(COL_CONTENT,reminder.getContent());
-	cv.put(COL_IMPORTANT,reminder.getImportant());
-	mDb.update(TABLE_NAME, cv, COL_ID + "=" + reminder.getId(), null);
+    public void updateReminder(Reminder reminder)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ID,reminder.getId());
+        cv.put(COL_CONTENT,reminder.getContent());
+        cv.put(COL_IMPORTANT,reminder.getImportant());
+        mDb.update(TABLE_NAME, cv, COL_ID + "=" + reminder.getId(), null);
     }
     //Delete a certain reminder given its id
-    public void deleteReminderById(int nId) 	{	mDb.delete(TABLE_NAME, COL_ID + "=" + nId, null)	}
+    public void deleteReminderById(int nId) {	mDb.delete(TABLE_NAME, COL_ID + "=" + nId, null);	}
 
     //Delete all reminders
     public void deleteAllReminders() 		{	mDb.execSQL("delete * from "+ TABLE_NAME);		}
