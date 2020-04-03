@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import androidx.core.content.ContextCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
-/**
- * Created by engMa_000 on 2017-04-03.
- */
 
 public class RemindersSimpleCursorAdapter extends SimpleCursorAdapter {
 
