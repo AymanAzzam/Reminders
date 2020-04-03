@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void showReminderBox(final boolean add ,final String oldItem,final int index_temp)
@@ -91,16 +93,32 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.activity_dialog_box);
 
+	    final LinearLayout linearLayout = (LinearLayout)dialog.findViewById(R.id.dialog_box);
+	    final TextView dialogType = (TextView)dialog.findViewById(R.id.dialog_type);
         final EditText editText = (EditText)dialog.findViewById(R.id.edit_text);
-        final Button bt_cancel = (Button) dialog.findViewById(R.id.cancel_button);
+	    final Button bt_cancel = (Button) dialog.findViewById(R.id.cancel_button);
         Button bt_task = (Button) dialog.findViewById(R.id.edit_button);
         final CheckBox cb = (CheckBox) dialog.findViewById(R.id.important_checkbox);
         final ImageView img = (ImageView) findViewById(R.id.row_imageview);
         final int index;
 
 
-        if(!add)    {   index = index_temp;     editText.setText(oldItem);  }
-        else        {   index = data.size();    bt_task.setText("Add");  }
+        if(!add)
+        {   
+            index = index_temp;     
+            editText.setText(oldItem);
+            dialogType.setText(R.string.edit_reminder_type);
+            dialogType.setBackgroundColor(getResources().getColor(R.color.blue));
+            linearLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+        }
+        else
+        {   
+            index = data.size();    
+            bt_task.setText("Add");
+            dialogType.setText(R.string.new_reminder_type);
+            dialogType.setBackgroundColor(getResources().getColor(R.color.green));
+            linearLayout.setBackgroundColor(getResources().getColor(R.color.green));
+        }
 
 
         bt_task.setOnClickListener(new View.OnClickListener() {
@@ -126,14 +144,12 @@ public class MainActivity extends AppCompatActivity {
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(add) {
-                    data.add(editText.getText().toString());
-                }
                 dialog.dismiss();
             }
         });
 
         dialog.show();
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     @Override

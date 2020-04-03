@@ -3,24 +3,29 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/edit_reminder"
         android:text="@string/edit_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:padding="8dp"/>
+        android:textColor="@color/black"
+        android:padding="16dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        android:padding="16dp" />
 
     <TextView
         android:id="@+id/delete_reminder"
         android:text="@string/delete_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:padding="8dp" />
+        android:textColor="@color/black"
+        android:padding="16dp" />
 
 
 </LinearLayout>

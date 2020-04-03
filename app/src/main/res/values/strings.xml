@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Reminders</string>
+
     <string name="edit_reminder">Edit Reminder</string>
     <string name="delete_reminder">Delete Reminder</string>
 
+    <string name="new_reminder_type">New Reminder:</string>
+    <string name="edit_reminder_type">Edit Reminder:</string>
 
 </resources>
