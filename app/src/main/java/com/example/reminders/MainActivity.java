@@ -70,24 +70,20 @@ public class MainActivity extends AppCompatActivity {
                 mId = cursor.getInt(cursor.getColumnIndex(remindersDbAdapter.COL_ID));
                 data.add(mContent);
                 indices.add(mId);
-                if (mImportant == 0)
-                    photos.add(R.drawable.green);
-                else
-                    photos.add(R.drawable.red);
+                if (mImportant == 0)    photos.add(R.drawable.green);
+                else                    photos.add(R.drawable.red);
 
             }
             while (cursor.moveToNext());
         }
         customListView.notifyDataSetChanged();
 
-        //arrayAdapter = new ArrayAdapter<String>(this, R.layout.single_row,R.id.row_textview,data);
         listView.setAdapter(customListView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 showAlertDialog(position);
-                //showReminderBox(false,data.get(position), position);
             }
         });
     }
@@ -143,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
         {   
             position = temp_position;
             editText.setText(data.get(position));
+	        if(photos.get(position) == R.drawable.red)
+		        cb.setChecked(true);
             dialogType.setText(R.string.edit_reminder_type);
             dialogType.setBackgroundColor(getResources().getColor(R.color.blue));
             linearLayout.setBackgroundColor(getResources().getColor(R.color.blue));
@@ -150,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             position = 15;  //garbage
-            bt_task.setText("Add");
             dialogType.setText(R.string.new_reminder_type);
             dialogType.setBackgroundColor(getResources().getColor(R.color.green));
             linearLayout.setBackgroundColor(getResources().getColor(R.color.green));
