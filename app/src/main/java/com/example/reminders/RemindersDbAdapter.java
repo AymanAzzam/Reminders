@@ -49,21 +49,21 @@ public class RemindersDbAdapter {
 
 
     //take the name as the content of the reminder and boolean important. the id will be created for you automatically
-    public void createReminder(String name, boolean important)
+    public long createReminder(String name, boolean important)
     {
-	    ContentValues contentValue = new ContentValues();
+        ContentValues contentValue = new ContentValues();
         contentValue.put(COL_CONTENT, name);
         contentValue.put(COL_IMPORTANT, important);
-        mDb.insert(TABLE_NAME, null, contentValue);
+        return mDb.insert(TABLE_NAME, null, contentValue);
     }
 
     //overloaded to take a reminder
-    public void createReminder(Reminder reminder)
+    public long createReminder(Reminder reminder)
     {
         ContentValues contentValue = new ContentValues();
         contentValue.put(COL_CONTENT, reminder.getContent());
-        contentValue.put(COL_IMPORTANT, reminder.getImportant());
-        mDb.insert(TABLE_NAME, null, contentValue);
+        contentValue.put(COL_IMPORTANT, (int) reminder.getImportant());
+        return mDb.insert(TABLE_NAME, null, contentValue);
     }
 
     //get a certain reminder given its id
@@ -85,9 +85,12 @@ public class RemindersDbAdapter {
     //Get all reminders
     public Cursor fetchAllReminders()
     {
-        Cursor c;
-        c = mDb.rawQuery("SELECT * from " + TABLE_NAME, null);
-        c.moveToFirst();
+        Cursor c = null;
+        try {
+            c = mDb.rawQuery("SELECT * from " + TABLE_NAME, null);
+            c.moveToFirst();
+        }
+        catch(Exception e)  {   e.printStackTrace();    }
         return c;
     }
 
@@ -98,13 +101,17 @@ public class RemindersDbAdapter {
         cv.put(COL_ID,reminder.getId());
         cv.put(COL_CONTENT,reminder.getContent());
         cv.put(COL_IMPORTANT,reminder.getImportant());
-        mDb.update(TABLE_NAME, cv, COL_ID + "=" + reminder.getId(), null);
+	    mDb.update(TABLE_NAME, cv, COL_ID + "=" + reminder.getId(), null);
     }
     //Delete a certain reminder given its id
-    public void deleteReminderById(int nId) {	mDb.delete(TABLE_NAME, COL_ID + "=" + nId, null);	}
+    public void deleteReminderById(int nId) 
+    {
+        try {   mDb.delete(TABLE_NAME, COL_ID + "=" + nId, null); }
+        catch(Exception e)  {   e.printStackTrace();    }
+    }
 
     //Delete all reminders
-    public void deleteAllReminders() 		{	mDb.execSQL("delete * from "+ TABLE_NAME);		}
+    public void deleteAllReminders() 		{	mDb.execSQL("delete from "+ TABLE_NAME);		}
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {

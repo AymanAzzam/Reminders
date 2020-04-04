@@ -19,15 +19,15 @@ public class CustomListView extends ArrayAdapter<String> {
 
     private ArrayList<String> data;
     private ArrayList<Integer> photos;
+    private ArrayList<Integer> indices;
     private Activity context;
 
-    public CustomListView(@NonNull Activity context, ArrayList<String> data, ArrayList<Integer> photos) {
+    public CustomListView(@NonNull Activity context, ArrayList<String> data, ArrayList<Integer> photos, ArrayList<Integer> indices) {
         super(context, R.layout.single_row,data);
         this.context = context;
         this.data = data;
         this.photos = photos;
-
-
+        this.indices = indices;
     }
 
     @NonNull
